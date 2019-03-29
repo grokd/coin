@@ -41,6 +41,9 @@ class BlockChain {
     }
 
     mine(difficulty: number){
+
+        console.log(`Initializing Proof of Work mining operation with ${difficulty} difficulty:`);
+        console.log('------------------------------------------');
         let targetHash = this.chain[this.chain.length - 1].hash
         let targetSlice = this.chain[this.chain.length - 1].hash.slice(0, difficulty);
         let winner = '';
@@ -70,6 +73,16 @@ class BlockChain {
 
     }
 
+    getSample(n: number){
+        console.log(`Random sample of ${n} consecutive blocks:`);
+        console.log('------------------------------------------');
+        let draw = Math.ceil( Math.random() * (this.chain.length - n) );
+        for(let i = 0; i < n; i++){
+            console.log(Coin.chain[draw + i]);
+            console.log('------------------------------------------');
+        }
+    }
+
 }
 
 
@@ -89,16 +102,10 @@ for(let i = 0; i < 1000; i++){
     Coin.addBlock( new Block( {amount: Math.ceil( Math.random() * 100 ) } ) );
 }
 
-console.log('Random sample of three consecutive blocks:');
-console.log('------------------------------------------');
-let draw = Math.ceil( Math.random() * 998 );
-console.log(Coin.chain[draw]);
-console.log('------------------------------------------');
-console.log(Coin.chain[draw + 1]);
-console.log('------------------------------------------');
-console.log(Coin.chain[draw + 2]);
-console.log('------------------------------------------');
+if(process.argv[2] == 'mine'){
+    Coin.mine(+process.argv[3]);
+}
 
-console.log('Now lets simulate a Proof of Work mining operation:');
-console.log('------------------------------------------');
-Coin.mine(+process.argv[2]);
+if(process.argv[2] == 'sample'){
+    Coin.getSample(+process.argv[3]);
+}
